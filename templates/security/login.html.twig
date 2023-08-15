@@ -1,0 +1,42 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}SortirAJMS | Connexion{% endblock %}
+
+{% block main %}
+    <br>
+    <br>
+    <br>
+    <form method="post">
+        {% if error %}
+            <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+        {% endif %}
+        {% for flash_message in app.flashes('success') %}
+            <div class="alert alert-success">
+                {{ flash_message }}
+            </div>
+        {% endfor %}
+
+        {% if app.user %}
+            <div class="mb-3">
+                Vous êtes bien connecté {{ app.user.userIdentifier }}, <a href="{{ path('app_logout') }}">Déconnexion</a>
+            </div>
+        {% endif %}
+
+        <h1 class="h3 mb-3 font-weight-normal">Identifiez vous</h1>
+        <div class="loginForm">
+            {{ form_start(loginForm) }}
+                <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+            {{ form_end(loginForm) }}
+        </div>
+            <div class="checkbox mb-3">
+                <label>
+                    <input type="checkbox" name="_remember_me"> Se souvenir de moi
+                </label>
+            </div>
+        <div class="lost-password-button">
+            <a href="{{ path('app_reset_password') }}">
+                <input type="button" value="Première connexion/Mot de passe oublié ?" class="btn btn-dark">
+            </a>
+        </div>
+    </form>
+{% endblock %}

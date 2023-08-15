@@ -1,0 +1,198 @@
+{% extends 'base.html.twig' %}
+
+{% block main %}
+    <h1>
+        Accueil
+        <img src="{{ asset("assets/favicon.ico") }}" alt="Image de profil" height="50" width="50">
+    </h1>
+    <br>
+    <div class="row d-flex flex-row-reverse mr-1">
+        <div class="d-flex flex-column">
+            <h6>Date du jour : {{ 'now' | date('d/m/Y') }}</h6>
+            <h6>Participant : {{ app.user.username }}</h6>
+
+        </div>
+    </div>
+
+    {% for message in app.flashes('success') %}
+        <br>
+        <div id="successMessage" class="alert alert-success" role="alert">
+            {{ message }}
+        </div>
+        <br>
+    {% endfor %}
+
+    {% for message in app.flashes('filtered') %}
+        <br>
+        <div id="filteredMessage" class="alert alert-primary" role="alert">
+            {{ message }}
+        </div>
+        <br>
+    {% endfor %}
+
+    <div class="container mt-3 mb-3">
+        <form action="{{ path('app_home') }}" method="post" style="color: black; background: rgba(178, 166, 98, 0.5); font-size: 17px;">
+            <fieldset style="border: 2px solid black; padding: 1rem;">
+                <legend>Recherche par filtres :</legend>
+                <div class="input-group input-group-sm mb-3">
+                    <span class="input-group-text" id="site_recherche">Recherche par site :</span>
+                    <select class="form-control" id="site" name="site">
+                        {% if site_recherche != null %}
+                            {% if site_recherche.id == app.user.site.id %}
+                                <option value="{{ site_recherche.id }}">{{ site_recherche.nom }} (site de rattachement)</option>
+                            {% else %}
+                                <option value="{{ site_recherche.id }}">{{ site_recherche.nom }}</option>
+                            {% endif %}
+                        {% endif %}
+                        {% for site in sites %}
+                            {% if site_recherche == null %}
+                                {% if site.id == app.user.site.id %}
+                                    <option value="{{ site.id }}">{{ site.nom }} (site de rattachement)</option>
+                                {% else %}
+                                    <option value="{{ site.id }}">{{ site.nom }}</option>
+                                {% endif %}
+                            {% else %}
+                                {% if site_recherche.id != site.id %}
+                                    {% if site.id == app.user.site.id %}
+                                        <option value="{{ site.id }}">{{ site.nom }} (site de rattachement)</option>
+                                    {% else %}
+                                        <option value="{{ site.id }}">{{ site.nom }}</option>
+                                    {% endif %}
+                                {% endif %}
+                            {% endif %}
+                        {% endfor %}
+                    </select>
+                </div>
+                <br>
+                <div class="input-group input-group-sm mb-3">
+                    <span class="input-group-text" id="recherche">Le nom de la sortie contient: </span>
+                    <input type="text" class="form-control" name="recherche" placeholder="Rechercher..." aria-describedby="id">
+                </div>
+                <br>
+                <div>
+                    <div class="form-check form-check-inline" style="padding-left: 0; width: 20%;">
+                        <p>Recherche par date entre le :</p>
+                    </div>
+                    <div class="form-check form-check-inline" style="padding-left: 0; width: 20%;">
+                        <label>
+                            <input id="date1" name="date1" type="date" value="{{ app.request.get('date1') }}"/>
+                        </label>
+                    </div>
+                    <div class="form-check form-check-inline" style="padding-left: 0; width: 20%;">
+                        <p>et le :</p>
+                    </div>
+                    <div class="form-check form-check-inline" style="padding-left: 0; width: 20%;">
+                        <label>
+                            <input id="date2" name="date2" type="date" value="{{ app.request.get('date2') }}"/>
+                        </label>
+                    </div>
+                </div>
+
+
+                <div>
+                    <div class="form-check form-check-inline">
+                        <label>
+                            <input type="checkbox" name="checkboxOrga" value="{{ user.id }}" {% if app.request.get('checkboxOrga') %} checked {% endif %}>
+                            Sorties dont je suis l'organisateur/trice
+                        </label>
+                        <br>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <label>
+                            <input type="checkbox" name="checkboxInscrit" value="{{ user.id }}" {% if app.request.get('checkboxInscrit') %} checked {% endif %}>
+                            Sorties auxquelles je suis inscrit/e
+                        </label>
+                        <br>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <label>
+                            <input type="checkbox" name="checkboxNonInscrit" value="{{ user.id }}" id="" {% if app.request.get('checkboxNonInscrit') %} checked {% endif %}>
+                            Sorties auxquelles je ne suis pas inscrit/e
+                        </label>
+                        <br>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <label>
+                            <input type="checkbox" name="checkboxPassees" value="5" id="" {% if app.request.get('checkboxPassees') %} checked {% endif %}>
+                            Sorties passées
+                        </label>
+                    </div>
+                </div>
+                <br>
+                <div>
+                    <input class="btn btn-dark" type="submit" value="Rechercher" style="width: 50%; letter-spacing: 1px;">
+                </div>
+            </fieldset>
+        </form>
+    </div>
+    <br>
+    <br>
+    <div class="table-responsive" style="margin: 0 1% 0 1%; font-family: 'Calibri', serif">
+        <table class="table table-sm table-hover" style="vertical-align: middle; background: rgba(178, 166, 98, 0.5);">
+            <thead class="thead-dark" style="border-width: 2px;">
+                <tr>
+                    <th scope="col">Nom de la Sortie</th>
+                    <th scope="col">Date de la sortie</th>
+                    <th scope="col">Clôture</th>
+                    <th scope="col">Inscrits/places</th>
+                    <th scope="col">État</th>
+                    {% if app.user.actif %}
+                    <th scope="col">Inscrit(e)</th>
+                    <th scope="col">Organisateur(trice)</th>
+                    <th scope="col">Actions</th>
+                    {% endif %}
+                </tr>
+            </thead>
+            <tbody style="border-width: 2px;">
+                {% for sortie in sorties %}
+                    <tr>
+                        <td>{{ sortie.nom }}</td>
+                        <td>{{ sortie.dateHeuredebut|date('d/m/y H:i') }}</td>
+                        <td>{{ sortie.dateLimiteInscription|date('d/m/y H:i') }}</td>
+                        <td>{{ sortie.users|length }}/{{ sortie.nbInscriptionMax }}</td>
+                        <td>{{ sortie.etatSortie.libelle}}</td>
+                        <td>
+                            {% if user in sortie.users %}
+                                X
+                            {% endif%}
+                        </td>
+                        {% if app.user.actif %}
+                        <td><a class="btn btn-dark" href="{{ path('profile_view', { 'id' : sortie.user.id, 'profile' : sortie.user }) }}">{{ sortie.user.name }}</a></td>
+
+                        <td>
+                            {% if sortie.user == app.user %}
+                                {% if sortie.etatSortie.id == 1 %}
+                                    <a class="btn btn-dark" href="{{ path('trip_edit', { 'id' : sortie.id, 'sortie' : sortie }) }}">Modifier</a>
+                                    <a class="btn btn-dark" href="{{ path('trip_publish', { 'id' : sortie.id, 'sortie' : sortie }) }}">Publier</a>
+                                {% elseif sortie.etatSortie.id == 2 or sortie.etatSortie.id == 3 %}
+                                    <a class="btn btn-dark" href="{{ path('trip_view', { 'id' : sortie.id, 'sortie' : sortie }) }}">Afficher</a>
+                                    <a class="btn btn-dark" href="{{ path('trip_cancel', { 'id' : sortie.id, 'sortie' : sortie }) }}">Annuler</a>
+                                {% else %}
+                                    <a class="btn btn-dark" href="{{ path('trip_view', { 'id' : sortie.id, 'sortie' : sortie }) }}">Afficher</a>
+                                {% endif %}
+                            {% else %}
+                                <a class="btn btn-dark" href="{{ path('trip_view', { 'id' : sortie.id, 'sortie' : sortie }) }}">Afficher</a>
+                            {% endif %}
+                                {% if sortie.user != app.user %}
+                                    {% if sortie.etatSortie.id == 2 %}
+                                        {% if app.user in sortie.users %}
+                                            <a class="btn btn-dark" href="{{ path('trip_desist', { 'id' : sortie.id, 'sortie' : sortie }) }}">Se désister</a>
+                                        {% else %}
+                                            <a class="btn btn-dark" href="{{ path('trip_register', { 'id' : sortie.id, 'sortie' : sortie }) }}">S'inscrire</a>
+                                        {% endif %}
+                                    {% elseif sortie.etatSortie.id == 3 and app.user in sortie.users %}
+                                        <a class="btn btn-dark" href="{{ path('trip_desist', { 'id' : sortie.id, 'sortie' : sortie }) }}">Se désister</a>
+                                    {% endif %}
+                                {% endif %}
+                            {% endif %}
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% if app.user.actif %}
+        <br>
+        <a class="btn btn-dark" href="{{ path('trip_create') }}" style="width: 50%; letter-spacing: 1px;">Créer une sortie</a>
+    {% endif %}
+{% endblock %}

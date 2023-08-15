@@ -1,0 +1,34 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}SortirAJMS | Créer une sortie{% endblock %}
+
+{% block page %}Créer une sortie{% endblock %}
+
+{% block main %}
+    <h1>Créer une sortie</h1>
+    {% for message in app.flashes('success') %}
+        <br>
+        <div id="successMessage" class="alert alert-success" role="alert">
+            {{ message }}
+        </div>
+        <br>
+    {% endfor %}
+    <br>
+    <div class="tripForm">
+        {{ form_start(tripForm) }}
+            {{ form_row(tripForm.nom) }}
+            {{ form_row(tripForm.dateHeuredebut) }}
+            {{ form_row(tripForm.dateLimiteInscription) }}
+            {{ form_row(tripForm.nbInscriptionMax) }}
+            {{ form_row(tripForm.duree) }}
+            {{ form_row(tripForm.infosSortie) }}
+            {{ form_row(tripForm.ville) }}
+            {{ form_row(tripForm.lieu) }}
+            <br>
+            <a class="btn btn-dark" href="{{ path('trip_addLieu') }}">Ajouter un lieu</a>
+            {{ form_widget(tripForm.save) }}
+            {{ form_widget(tripForm.publish) }}
+            <a class="btn btn-dark" href="{{ path('app_home') }}">Annuler</a>
+        {{ form_end(tripForm) }}
+    </div>
+{% endblock %}

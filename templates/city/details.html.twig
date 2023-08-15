@@ -1,0 +1,20 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}SortirAjms | Modifier une ville{% endblock %}
+{% block page %}Modifier une ville{% endblock %}
+{% block main %}
+    <h1 class="jumbotron-heading">Modifier une ville</h1>
+    <br>
+    <div class="container mt-3 mb-3">
+    <form action="{{ path('app_home') }}" method="post" style="color: black; background: rgba(178, 166, 98, 0.5); font-size: 17px;">
+        <fieldset style="border: 2px solid black; padding: 1rem;">
+            {% form_theme formVille 'bootstrap_5_layout.html.twig' %}
+            {{ form_start(formVille) }}
+                {{ form_row(formVille.nom) }}
+                {{ form_row(formVille.codePostal) }}
+                {{ form_widget(formVille.submit) }}
+                <a class="btn btn-dark" href="{{ path('city_index') }}">Annuler</a>
+            {{ form_end(formVille) }}
+        </fieldset>
+    </form>
+{% endblock %}

@@ -1,0 +1,19 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}SortirAjms | Ajouter une ville{% endblock %}
+
+{% block page %}Ville{% endblock %}
+
+{% block main %}
+    <div class="container mt-3 mb-3">
+        <h1 class="jumbotron-heading">Ajouter une ville</h1><br/>
+        {% form_theme formVille 'bootstrap_5_layout.html.twig' %}
+        {{ form_start(formVille) }}
+            {{ form_row(formVille.nom) }}
+            {{ form_row(formVille.codePostal) }}
+            <br>
+            {{ form_widget(formVille.submit) }}
+            <a class="btn btn-dark" href="{{ path('city_index') }}">Annuler</a>
+        {{ form_end(formVille) }}
+    </div>
+{% endblock %}

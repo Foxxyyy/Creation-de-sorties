@@ -1,0 +1,33 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}SortirAJMS | Annuler une sortie{% endblock %}
+
+{% block page %}Annuler une sortie{% endblock %}
+
+{% block main %}
+    <h1>Annuler la sortie</h1>
+    <br>
+    <div class="container mt-3 mb-3">
+        <form action="{{ path('trip_validate_cancel', { 'id' : sortie.id, 'sortie' : sortie }) }}" method="post" style="color: black; background: rgba(178, 166, 98, 0.5); font-size: 17px;">
+            <fieldset style="border: 2px solid black; padding: 1rem;">
+                <label for="sortieNom">Nom de la sortie :</label>
+                <input type="text" class="form-control" id="sortieNom" disabled value="{{ sortie.nom }}">
+                <br>
+                <label for="sortieDate">Date de la sortie :</label>
+                <input type="date" class="form-control" id="sortieDate" disabled value="{{ sortie.dateHeuredebut|date('Y-m-d') }}">
+                <br>
+                <label for="sortieVille">Ville organisatrice :</label>
+                <input type="text" class="form-control" id="sortieVille" disabled value="{{ sortie.ville }}">
+                <br>
+                <label for="sortieLieu">Lieu :</label>
+                <input type="text" class="form-control" id="sortieLieu" disabled value="{{ sortie.lieu.nom }} - {{ sortie.lieu.rue }} - {{ sortie.lieu.ville.nom }}">
+                <br>
+                <label for="sortieMotif">Motif de l'annulation :</label>
+                <input type="text" class="form-control" name="sortieMotif" id="sortieMotif" placeholder="Saisissez une description...">
+                <br>
+                <input type="submit" class="btn btn-dark" value="Enregistrer" onclick="return confirm('Etes-vous sur de vouloir annuler cette sortie ?')">
+                <a class="btn btn-dark" href="{{ path('app_home') }}">Annuler</a>
+            </fieldset>
+        </form>
+    </div>
+{% endblock %}

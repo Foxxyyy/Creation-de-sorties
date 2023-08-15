@@ -1,0 +1,18 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}SortirAjms | Ajouter un site{% endblock %}
+
+{% block page %}Site{% endblock %}
+
+{% block main %}
+    <div class="container mt-3 mb-3">
+        <h1 class="jumbotron-heading">Ajouter un site</h1><br/>
+        {% form_theme formSite 'bootstrap_5_layout.html.twig' %}
+        {{ form_start(formSite) }}
+            {{ form_row(formSite.nom) }}
+            <br>
+            {{ form_widget(formSite.submit) }}
+            <a class="btn btn-dark" href="{{ path('site_index') }}">Annuler</a>
+        {{ form_end(formSite) }}
+    </div>
+{% endblock %}

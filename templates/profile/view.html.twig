@@ -1,0 +1,27 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}SortirAJMS | Participants{% endblock %}
+
+{% block page %}Bienvenue {{ app.user.name }}{% endblock %}
+
+{% block main %}
+    <h1>
+        {{ profile.pseudo }}
+        {% set url = profile.photo is null or profile.photo is empty ? 'assets/img/avatars.svg' : "uploads/" ~ profile.photo %}
+        <img src='{{ asset(url) }}' alt="Image de profil" height="50" width="50" style="border-radius: 25px;">
+    </h1>
+    <br>
+    <br>
+    <div class="contributorForm">
+        {{ form_start(contributorForm)}}
+            {{ form_row(contributorForm.pseudo) }}
+            {{ form_row(contributorForm.name) }}
+            {{ form_row(contributorForm.lastName) }}
+            {{ form_row(contributorForm.email) }}
+            {{ form_row(contributorForm.telephone, {'attr': { 'placeholder': 'Inconnu' }}) }}
+            {{ form_row(contributorForm.site) }}
+            <br>
+            <a class="btn btn-dark" href="{{ path('app_home') }}">Annuler</a>
+        {{ form_end(contributorForm)}}
+    </div>
+{% endblock %}

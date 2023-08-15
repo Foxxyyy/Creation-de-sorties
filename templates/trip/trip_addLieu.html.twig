@@ -1,0 +1,23 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}SortirAJMS | Lieux{% endblock %}
+
+{% block page %} Lieux {% endblock %}
+
+{% block main %}
+    <h1>Lieux </h1>
+
+    <div class="container mt-3 mb-3">
+
+        {% form_theme formLieu 'bootstrap_5_layout.html.twig' %}
+        {{ form(formLieu) }}
+
+    </div>
+{% endblock %}
+
+
+
+
+
+
+

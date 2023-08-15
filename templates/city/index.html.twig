@@ -1,0 +1,62 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}SortirAjms | Villes{% endblock %}
+{% block page %} Villes{% endblock %}
+{% block main %}
+    <h1 class="jumbotron-heading">
+        Gérer les villes
+        <img src="{{ asset("assets/favicon.ico") }}" alt="Image de profil" height="50" width="50">
+    </h1>
+    <br>
+
+    {% for message in app.flashes('success') %}
+        <div class="alert alert-success" role="alert">
+            {{ message }}
+        </div>
+    {% endfor %}
+
+    <div class="container mt-3 mb-3">
+        <form action="{{ path('city_index') }}" method="post" style="color: black; background: rgba(178, 166, 98, 0.5); font-size: 17px;">
+            <fieldset style="border: 2px solid black; padding: 1rem;">
+                <legend>Recherche par texte :</legend>
+                <br>
+                <br>
+                <div class="input-group input-group-sm mb-3">
+                    <span class="input-group-text" id="recherche">Recherche par texte :</span>
+                    <input type="text" id="recherche" name="recherche" class="form-control" placeholder="Rechercher une ville" />
+                </div>
+                <div>
+                    <input class="btn btn-dark" type="submit" value="Rechercher" style="width: 50%; letter-spacing: 1px;">
+                </div>
+            </fieldset>
+        </form>
+    </div>
+    <br>
+    <div class="table-responsive" style="margin: 0 1% 0 1%; font-family: 'Calibri', serif">
+        <table class="table table-sm table-hover" style="vertical-align: middle; background: rgba(178, 166, 98, 0.5);">
+            <thead class="thead-dark" style="border-width: 2px;">
+                <tr>
+                    <th scope="col">NOM DE LA VILLE</th>
+                    <th scope="col">CODE POSTAL</th>
+                    <th scope="col">ACTIONS</th>
+                </tr>
+            </thead>
+            <tbody style="border-width: 2px;">
+                {% for ville in villes %}
+                    <tr>
+                        <td>{{ ville.nom }}</td>
+                        <td>{{ ville.codePostal }}</td>
+                        <td>
+                            <form>
+                            <input class="btn btn-dark" type="submit" value="Modifier" formaction="{{ path('city_modifier', {'id' : ville.id}) }}">
+                            <input class="btn btn-dark" type="submit" value="Supprimer" formaction="{{ path('city_remove', {'id' : ville.id}) }}">
+                            </form>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <br>
+        <a type="button" class="btn btn-dark" href="{{ path('city_create') }}" style="width: 50%; letter-spacing: 1px;">Ajouter</a>
+    </div>
+{% endblock %}

@@ -1,0 +1,32 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}SortirAJMS | Participants{% endblock %}
+
+{% block page %}Bienvenue {{ app.user.name }}{% endblock %}
+
+{% block main %}
+    <h1>
+        Modifier mon profil
+        {% set url = app.user.photo is null or app.user.photo is empty ? 'assets/img/avatars.svg' : "uploads/" ~ app.user.photo %}
+        <img src='{{ asset(url) }}' alt="Image de profil" height="50" width="50" style="border-radius: 25px;">
+    </h1>
+    <br>
+    <h4>Bienvenue {{ app.user.pseudo}} sur votre espace personnel.</h4>
+    <br>
+    <div class="contributorForm">
+        {{ form_start(contributorForm)}}
+            {{ form_row(contributorForm.pseudo) }}
+            {{ form_row(contributorForm.name) }}
+            {{ form_row(contributorForm.lastName) }}
+            {{ form_row(contributorForm.email) }}
+            {{ form_row(contributorForm.password) }}
+            {{ form_row(contributorForm.telephone) }}
+            {{ form_row(contributorForm.site) }}
+            {{ form_row(contributorForm.photoFile) }}
+            <br>
+            {{ form_widget(contributorForm.submit) }}
+            <a class="btn btn-dark" href="{{ path('app_change_password') }}">Modifier mot de passe</a>
+            <a class="btn btn-dark" href="{{ path('app_home') }}">Annuler</a>
+        {{ form_end(contributorForm)}}
+    </div>
+{% endblock %}

@@ -1,0 +1,94 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}SortirAJMS | Modifier une sortie{% endblock %}
+
+{% block page %}Modifier une sortie{% endblock %}
+
+{% block main %}
+    {% if edit %}
+        <h1>Modifier une sortie</h1>
+    {% else %}
+        <h1>Afficher une sortie</h1>
+    {% endif %}
+    <br>
+    <div class="tripForm">
+        {% if editTripForm is defined %}
+            {{ form_start(editTripForm) }}
+                {{ form_row(editTripForm.nom) }}
+                {{ form_row(editTripForm.dateHeuredebut) }}
+                {{ form_row(editTripForm.dateLimiteInscription) }}
+                {{ form_row(editTripForm.nbInscriptionMax) }}
+                {{ form_row(editTripForm.duree) }}
+                {{ form_row(editTripForm.infosSortie) }}
+                {{ form_row(editTripForm.ville) }}
+                {{ form_row(editTripForm.lieu) }}
+                <a class="btn btn-dark" href="{{ path('trip_addLieu') }}">Ajouter un Lieu</a>
+                <br>
+                <br>
+                {{ form_widget(editTripForm.save) }}
+                {{ form_widget(editTripForm.publish) }}
+                <a class="btn btn-dark" href="{{ path('trip_delete', { 'id' : sortie.id, 'sortie' : sortie }) }}" onclick="return confirm('Etes-vous sur de vouloir supprimer cette sortie ?')">Supprimer</a>
+                <a class="btn btn-dark" href="{{ path('app_home') }}">Annuler</a>
+            {{ form_end(editTripForm) }}
+        {% elseif viewTripForm is defined %}
+            {{ form_start(viewTripForm) }}
+                {{ form_row(viewTripForm.nom) }}
+                {{ form_row(viewTripForm.dateHeuredebut) }}
+                {{ form_row(viewTripForm.dateLimiteInscription) }}
+                {{ form_row(viewTripForm.nbInscriptionMax) }}
+                {{ form_row(viewTripForm.duree) }}
+                {{ form_row(viewTripForm.infosSortie) }}
+                {{ form_row(viewTripForm.ville) }}
+                {{ form_row(viewTripForm.lieu) }}
+                <label for="rue">Rue :</label>
+                <input type="text" class="form-control" id="rue" value="{{ sortie.lieu.rue }}" disabled>
+                <br>
+                <label for="code-postal">Code Postal :</label>
+                <input type="text" class="form-control" id="code-postal" value="{{ sortie.ville.codePostal }}" disabled>
+                <br>
+                <label for="latitude-longitude">Latitude / Longitude :</label>
+                {% if sortie.lieu.latitude is empty and sortie.lieu.longitude is empty %}
+                    <input type="text" class="form-control" id="latitude-longitude" value="Inconnue" disabled>
+                {% else %}
+                    <input type="text" class="form-control" id="latitude-longitude" value="{{ sortie.lieu.latitude  }} / {{ sortie.lieu.longitude }}" disabled>
+                {% endif %}
+                <br>
+            {{ form_end(viewTripForm) }}
+            <br>
+        {% endif %}
+
+        {% if sortie.user != app.user %}
+            <a class="btn btn-dark" href="{{ path('app_home') }}">Annuler</a>
+        {% elseif editTripForm is not defined %}
+            {% if sortie.etatSortie.id == 2 or sortie.etatSortie.id == 3 %}
+                <a class="btn btn-dark" href="{{ path('trip_cancel', { 'id' : sortie.id, 'sortie' : sortie }) }}">Annuler la sortie</a>
+            {% endif %}
+            <a class="btn btn-dark" href="{{ path('app_home') }}">Annuler</a>
+        {% endif %}
+    </div>
+    <br>
+    <br>
+    <br>
+    <br>
+    <h1>Liste des participants inscrits :</h1>
+    <br>
+    <div class="table-responsive" style="margin: 0 10% 0 10%; font-family: 'Calibri', serif">
+        <table class="table table-sm table-hover" style="vertical-align: middle; background: rgba(178, 166, 98, 0.5);">
+            <thead class="thead-dark" style="border-width: 2px;">
+            <tr>
+                <th scope="col">PSEUDO</th>
+                <th scope="col">NOM</th>
+            </tr>
+            </thead>
+            <tbody style="border-width: 2px;">
+            {% for participant in sortie.users %}
+                <tr>
+                    <td>{{ participant.pseudo }}</td>
+                    <td>{{ participant.name }}</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+
+        </table>
+    </div>
+{% endblock %}

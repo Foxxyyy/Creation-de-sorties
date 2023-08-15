@@ -1,0 +1,19 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}SortirAjms | Modifier un site{% endblock %}
+{% block page %}Mofifier un site{% endblock %}
+{% block main %}
+    <h1 class="jumbotron-heading">Modifier un site</h1>
+    <br>
+    <div class="container mt-3 mb-3">
+    <form action="{{ path('app_home') }}" method="post" style="color: black; background: rgba(178, 166, 98, 0.5); font-size: 17px;">
+        <fieldset style="border: 2px solid black; padding: 1rem;">
+            {% form_theme formSite 'bootstrap_5_layout.html.twig' %}
+            {{ form_start(formSite) }}
+                {{ form_row(formSite.nom) }}
+                {{ form_widget(formSite.submit) }}
+                <a class="btn btn-dark" href="{{ path('site_index') }}">Annuler</a>
+            {{ form_end(formSite) }}
+        </fieldset>
+    </form>
+{% endblock %}
